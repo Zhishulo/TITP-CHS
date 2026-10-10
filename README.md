@@ -133,16 +133,16 @@ BepInEx 属于常见的 Unity 游戏 mod 框架，本游戏没有反作弊；成
 
 ## 8. 版本与校验
 
-- 汉化版本：**v1.0.1（全量修复版）**
+- 汉化版本：**v1.0.1（全量修复版，2026-10-11 修订）**
 - 译文数据：`data\zh\*.json`，75 个文件 / **28144 条** / 约 **1069474 个汉字**
 - 构建实测：`zh map size 24312`、`translated 34081 strings across 1407 files`、`fonts swapped 15 / textassets replaced 1481`
-- 注入后 assets SHA-256（前 16 位）：`resources.assets 86769CB485AD4E3A`、`sharedassets0.assets AAF29309AF8302A4`
+- 注入后 assets SHA-256（前 16 位）：`resources.assets 02B3837BC70060C4`、`sharedassets0.assets AAF29309AF8302A4`
 - 插件 `TITPFontFix.dll`（v7，17408 字节）SHA-256：
-  `73DDBC6A47B33F17C7CAA0D937762117B4DB0C0C7EED6678E48ECAEF36794E75`
+  `3DD8D08EE46E2C72C6A2EF68A70D7C52C2D079728CD70FA519595D43FEAEE639`
 - 字体：`fonts\sub-Regular.ttf`（Noto Sans SC 子集，1405748 字节，SIL OFL 1.1）
 - BepInEx：5.4.22.0（<https://github.com/BepInEx/BepInEx/releases/tag/v5.4.22>）
-- 安装包 `TITP-CHS-v1.0.1.zip`（29,312,769 字节）SHA-256：
-  `8C49D399D240848DACD2D7E323821C92DFC419AE0BCE2653C145B9BC151AD85C`
+- 安装包 `TITP-CHS-v1.0.1.zip`（29,316,743 字节）SHA-256：
+  `327A1D64C2872FE490FECDB50C2AC0E612EB60BFF103B069DBE1890E92C7FD3E`
   下载后可用 `certutil -hashfile TITP-CHS-v1.0.1.zip SHA256` 核对（GitHub Release 上传的资产已由 GitHub 校验为同一哈希）。
 
 ## 9. 鸣谢与许可

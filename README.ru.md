@@ -147,12 +147,12 @@ BepInEx — обычный фреймворк для модов Unity, анти�
 
 ## 8. Версия и контрольные суммы
 
-- Версия локализации: **v1.0.1 (полный выпуск с исправлениями)**
+- Версия локализации: **v1.0.1 (полный выпуск с исправлениями, редакция 2026-10-11)**
 - Данные перевода: `data\zh\*.json`, 75 файлов / **28 144 записи** / ~**1 069 474 иероглифа**
 - Замер сборки: `zh map size 24312`, `translated 34081 strings across 1407 files`, `fonts swapped 15 / textassets replaced 1481`
-- SHA-256 внедрённых assets (первые 16 знаков): `resources.assets 86769CB485AD4E3A`, `sharedassets0.assets AAF29309AF8302A4`
+- SHA-256 внедрённых assets (первые 16 знаков): `resources.assets 02B3837BC70060C4`, `sharedassets0.assets AAF29309AF8302A4`
 - Плагин `TITPFontFix.dll` (v7, 17 408 байт), SHA-256:
-  `73DDBC6A47B33F17C7CAA0D937762117B4DB0C0C7EED6678E48ECAEF36794E75`
+  `3DD8D08EE46E2C72C6A2EF68A70D7C52C2D079728CD70FA519595D43FEAEE639`
 - Шрифт: `fonts\sub-Regular.ttf` (подмножество Noto Sans SC, 1 405 748 байт, SIL OFL 1.1)
 - BepInEx: 5.4.22.0 (<https://github.com/BepInEx/BepInEx/releases/tag/v5.4.22>)
 - Установщик: `TITP-CHS-v1.0.1.zip` — размер и SHA-256 публикуются вместе с релизом

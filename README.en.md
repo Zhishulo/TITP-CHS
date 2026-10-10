@@ -144,12 +144,12 @@ If you find one, append the string as `English<TAB>Chinese` to `<game>\BepInEx\p
 
 ## 8. Version and checksums
 
-- Localization version: **v1.0.1 (full fix release)**
+- Localization version: **v1.0.1 (full fix release, revised 2026-10-11)**
 - Translation data: `data\zh\*.json`, 75 files / **28,144 entries** / ~**1,069,474 Chinese characters**
 - Measured build output: `zh map size 24312`, `translated 34081 strings across 1407 files`, `fonts swapped 15 / textassets replaced 1481`
-- Injected assets SHA-256 (first 16 hex digits): `resources.assets 86769CB485AD4E3A`, `sharedassets0.assets AAF29309AF8302A4`
+- Injected assets SHA-256 (first 16 hex digits): `resources.assets 02B3837BC70060C4`, `sharedassets0.assets AAF29309AF8302A4`
 - Plug-in `TITPFontFix.dll` (v7, 17,408 bytes) SHA-256:
-  `73DDBC6A47B33F17C7CAA0D937762117B4DB0C0C7EED6678E48ECAEF36794E75`
+  `3DD8D08EE46E2C72C6A2EF68A70D7C52C2D079728CD70FA519595D43FEAEE639`
 - Font: `fonts\sub-Regular.ttf` (Noto Sans SC subset, 1,405,748 bytes, SIL OFL 1.1)
 - BepInEx: 5.4.22.0 (<https://github.com/BepInEx/BepInEx/releases/tag/v5.4.22>)
 - Installer: `TITP-CHS-v1.0.1.zip` — its size and SHA-256 are published with the release itself
