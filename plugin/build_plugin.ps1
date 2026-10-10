@@ -29,7 +29,8 @@ $refs = @(
   (Join-Path $man 'UnityEngine.UIModule.dll'),
   (Join-Path $man 'UnityEngine.UI.dll'),
   (Join-Path $man 'Unity.TextMeshPro.dll'),
-  (Join-Path $game 'BepInEx\core\BepInEx.dll')
+  (Join-Path $game 'BepInEx\core\BepInEx.dll'),
+  (Join-Path $game 'BepInEx\core\0Harmony.dll')
 )
 foreach ($r in $refs) { if (-not (Test-Path $r)) { throw "missing reference: $r" } }
 

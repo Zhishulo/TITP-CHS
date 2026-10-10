@@ -19,6 +19,17 @@
 //   6. "Overlay": if BepInEx\plugins\TITP-CHS\ui_extra.tsv exists (english<TAB>chinese per
 //      line), any text component whose text matches exactly is rewritten at runtime.
 //
+// v8 addition (vanilla crash guard):
+//   7. ConditionHelper eagerly dereferences GameHandler.CurrentEventProcessor while
+//      evaluating some event conditions (e.g. "REQUEST_AGING: >=5"), so when no event
+//      processor is active (the Applications window opens a micromonologue popup) the
+//      condition lambda throws NullReferenceException. That aborts
+//      EventProcessor.GetFirstMicromonologueLine() -> MicroMonologueElement.Initialize()
+//      halfway, leaving the accept/decline popup visible but dead (this is the
+//      "hire screen stuck on Yes/No" bug). A Harmony finalizer on
+//      ThisIsThePresident.Game.ConditionPostfixListElement.GetChar() turns any such
+//      exception into a plain "false" result, so condition evaluation continues.
+//
 // Compile with plugin\build_plugin.ps1 (system csc, C# 5 only).
 using System;
 using System.Collections;
@@ -27,6 +38,8 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using BepInEx;
+using BepInEx.Logging;
+using HarmonyLib;
 using TMPro;
 using UnityEngine;
 using UnityEngine.TextCore;
@@ -35,7 +48,7 @@ using UnityEngine.UI;
 
 namespace TITP
 {
-    [BepInPlugin("titp.chinesefontfix", "TITP Chinese Font Fix", "7.0.0")]
+    [BepInPlugin("titp.chinesefontfix", "TITP Chinese Font Fix", "8.0.0")]
     public class TITPFontFix : BaseUnityPlugin
     {
         private const int SamplingPointSize = 48;
@@ -67,8 +80,104 @@ namespace TITP
             try { if (!Directory.Exists(_dataDir)) Directory.CreateDirectory(_dataDir); }
             catch (Exception ex) { Logger.LogWarning("TITP font fix: cannot create data dir: " + ex.Message); }
             LoadUiMap();
-            Logger.LogInfo("TITP font fix v7: unity=" + Application.unityVersion + " pluginPath=" + Paths.PluginPath
+            InstallConditionGuard();
+            Logger.LogInfo("TITP font fix v8: unity=" + Application.unityVersion + " pluginPath=" + Paths.PluginPath
                 + " dataDir=" + _dataDir + " uiMap=" + _uiMap.Count);
+        }
+
+        // ------------------------------------------------------------------
+        // v8: keep the game alive when an event condition throws (vanilla bug)
+        // ------------------------------------------------------------------
+        private static string _curCondition;
+        private static int _condGuardErrors;
+        private static PropertyInfo _cepProp;
+        private static ManualLogSource _log;
+
+        private static void LogWarn(string message)
+        {
+            if (_log != null) _log.LogWarning(message);
+        }
+
+        private void InstallConditionGuard()
+        {
+            _log = Logger;
+            try
+            {
+                Harmony harmony = new Harmony("titp.chinesefontfix.conditionguard");
+                MethodInfo getChar = AccessTools.Method("ThisIsThePresident.Game.ConditionPostfixListElement:GetChar");
+                if (getChar == null)
+                {
+                    Logger.LogWarning("condition guard: ConditionPostfixListElement.GetChar not found");
+                }
+                else
+                {
+                    MethodInfo fin = typeof(TITPFontFix).GetMethod("ConditionGetCharFinalizer",
+                        BindingFlags.Static | BindingFlags.NonPublic);
+                    harmony.Patch(getChar, finalizer: new HarmonyMethod(fin));
+                    Logger.LogInfo("condition guard: finalizer installed on "
+                        + getChar.DeclaringType.FullName + "." + getChar.Name);
+                }
+                MethodInfo solve = AccessTools.Method("ThisIsThePresident.Game.ConditionHelper:SolveCondition",
+                    new Type[] { typeof(string), typeof(bool) });
+                if (solve != null)
+                {
+                    MethodInfo pre = typeof(TITPFontFix).GetMethod("ConditionSolvePrefix",
+                        BindingFlags.Static | BindingFlags.NonPublic);
+                    harmony.Patch(solve, prefix: new HarmonyMethod(pre));
+                }
+                else
+                {
+                    Logger.LogWarning("condition guard: ConditionHelper.SolveCondition not found (no breadcrumb)");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning("condition guard: install failed: " + ex);
+            }
+        }
+
+        // Remember the condition being evaluated so the log names the culprit.
+        private static void ConditionSolvePrefix(string condition)
+        {
+            _curCondition = condition;
+        }
+
+        // Any exception inside a condition function is reported as "condition not met"
+        // instead of aborting the caller (EventProcessor.GetFirstMicromonologueLine etc).
+        private static Exception ConditionGetCharFinalizer(Exception __exception, ref char __result)
+        {
+            if (__exception == null) return null;
+            _condGuardErrors++;
+            if (_condGuardErrors <= 20)
+            {
+                string where = "";
+                try { where = DescribeCurrentEventProcessor(); }
+                catch (Exception ex) { where = " cep=? (" + ex.GetType().Name + ")"; }
+                LogWarn("condition guard #" + _condGuardErrors + ": '" + (_curCondition == null ? "?" : _curCondition)
+                    + "' threw " + __exception.GetType().Name + ": " + __exception.Message + where + " -> treated as false");            }
+            __result = 'f';
+            return null;
+        }
+
+        private static string DescribeCurrentEventProcessor()
+        {
+            if (_cepProp == null)
+            {
+                Assembly[] asms = AppDomain.CurrentDomain.GetAssemblies();
+                for (int i = 0; i < asms.Length; i++)
+                {
+                    Type gh = asms[i].GetType("ThisIsThePresident.GameHandler", false);
+                    if (gh == null) continue;
+                    _cepProp = gh.GetProperty("CurrentEventProcessor", BindingFlags.Public | BindingFlags.Static);
+                    if (_cepProp != null) break;
+                }
+            }
+            if (_cepProp == null) return " cep=?";
+            object ep = _cepProp.GetValue(null, null);
+            if (ep == null) return " cep=null";
+            PropertyInfo info = ep.GetType().GetProperty("Info", BindingFlags.Public | BindingFlags.Instance);
+            object infoVal = info == null ? null : info.GetValue(ep, null);
+            return " cep=set info=" + (infoVal == null ? "null" : "set");
         }
 
         void Update()

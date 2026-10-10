@@ -1,6 +1,23 @@
-## 《This Is the President》完整简体中文汉化 v1.0.1
+## 《This Is the President》完整简体中文汉化 v1.0.2
 
 **全文本汉化**，覆盖游戏从主菜单到结局的全部文字。
+
+### v1.0.2 修订（2026-10-11，原版崩溃兜底）
+
+修好一处**原版自身的崩溃**导致的卡死：在「申请」窗口点「雇佣」后弹出的确认框（「是」/「否」）
+按钮亮着却点不动、事件卡在那里走不下去。
+
+原因是原版在求值事件条件 `REQUEST_AGING` 时，先解引用 `GameHandler.CurrentEventProcessor`
+（此刻恰好为 null）才判空，于是抛 `NullReferenceException`，微独白弹窗的初始化中途中断——
+按钮的点击回调根本没来得及挂上（所以看起来是「亮着但没反应」）。
+
+- 影响：**原版游戏同样会出现，与汉化无关**；`Player.log` 里的异常栈为
+  `ConditionHelper.<>c.<.cctor>b__89_51` → `EventProcessor.GetFirstMicromonologueLine()`
+  → `MicroMonologueElement.Initialize`
+- 修复：插件 `TITPFontFix` 升到 **v8.0.0**，给 `ConditionPostfixListElement.GetChar()` 挂 Harmony finalizer——
+  条件求值抛异常时按「条件不成立」处理（`__result='f'`）并记一条告警，让事件继续。
+  **不改任何游戏数据、存档与平衡**
+- 验证：实机跑通「雇佣 → 确认框 → 是/否可点 → 事件继续」；日志里 7 条兜底告警，无其它异常
 
 ### v1.0.1 修订（2026-10-11，重要）
 
@@ -39,11 +56,11 @@
 ### 技术方案（两层）
 
 1. **注入层**：把译文写进游戏自己的 `TextAsset` 语言槽（4 个语言槽全部替换），并换上中文字体 —— 游戏 95% 的文本走这条路。
-2. **运行时层**：附带的 BepInEx 插件 `TITPFontFix` 为游戏的 TextMeshPro 字体资产在运行时烘出 CJK 动态图集（原始资产是静态图集、不含汉字，不装插件会显示方框），并覆盖硬编码 UI。**只动字体，不改游戏逻辑、存档与平衡。**
+2. **运行时层**：附带的 BepInEx 插件 `TITPFontFix` 为游戏的 TextMeshPro 字体资产在运行时烘出 CJK 动态图集（原始资产是静态图集、不含汉字，不装插件会显示方框），并覆盖硬编码 UI。**只动字体 + 一处原版崩溃兜底，不改游戏数据、存档与平衡。**
 
 ### 安装
 
-1. 下载本 Release 的 `TITP-CHS-v1.0.1.zip` 并解压到任意目录
+1. 下载本 Release 的 `TITP-CHS-v1.0.2.zip` 并解压到任意目录
 2. 双击 `install.bat`（未自动找到游戏时把游戏根目录拖进窗口回车；多 Steam 库用 `install.bat --list-games`）
 3. 从 Steam 正常启动游戏
 
@@ -53,12 +70,12 @@
 ### 校验
 
 ```
-文件：TITP-CHS-v1.0.1.zip
-大小：29,316,743 字节
-SHA-256：327A1D64C2872FE490FECDB50C2AC0E612EB60BFF103B069DBE1890E92C7FD3E
+文件：TITP-CHS-v1.0.2.zip
+大小：29,318,015 字节
+SHA-256：A0D2B00CC6C323A7DE76731BBB37CE809951802AF0B14EFB8847E5CE6E8E12AE
 ```
 
-Windows 上可用 `certutil -hashfile TITP-CHS-v1.0.1.zip SHA256` 自行核对。
+Windows 上可用 `certutil -hashfile TITP-CHS-v1.0.2.zip SHA256` 自行核对。
 
 ### 反馈
 
