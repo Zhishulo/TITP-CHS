@@ -1,0 +1,176 @@
+# TITP-CHS 硬编码 UI 覆盖表：原文(英文/俄文/德文)<TAB>中文
+# 插件每 30 帧对完全相同的 TMP_Text / UI.Text 就地替换（比较时忽略首尾空白）；
+# 值写 <clear> 表示把该文本清空（用于角色介绍里重复的英文残行）。
+# '\n' 与 '\t' 在键和值里都可写成转义形式。# 开头为注释。
+
+# ---------- 1. 基础按钮 / 面板标题（v6 起沿用） ----------
+Accept	接受
+Decline	拒绝
+NEXT	下一步
+Next Turn	下一回合
+End Turn	结束回合
+QUIT	退出
+Resume	继续游戏
+Start	开始
+Turn	回合
+Cabinet	内阁
+Veto	否决
+Approve	批准
+Reject	拒绝
+Laws	法律
+Impeach	弹劾
+Resign	辞职
+Load Game	读取游戏
+Save Game	保存游戏
+Main Menu	主菜单
+Task Force	特别工作组
+Advisors	顾问
+News	新闻
+Ratings	支持率
+Budget	预算
+Documents	文件
+Bills	法案
+
+# ---------- 2. 硬编码游戏 UI（普查自 ui_strings.txt，148 条中确认未进词典者） ----------
+Documents to read	待阅文件
+Monthly budget	每月预算
+Appoint / Remove	任命 / 免职
+Change salary	调整薪资
+Character Salaries	人物薪资
+Event Results	事件结果
+Badget at the end of month	月底预算
+Do you want to save game?	要保存游戏吗？
+Dont show again	不再显示
+Submit	提交
+Give a Speech!	发表演讲！
+Investigate!	调查！
+Get Back	返回
+New team member	新队员
+Rating boost:	支持率提升：
+3 Months	3 个月
+On vacation	休假中
+Upgraded to the second tier	已升级至第二档
+rating change	支持率变化
+the rating change interval will improve	支持率的变化间隔将缩短
+You cannot afford this sum	您付不起这笔钱
+Write a tweet	写推文
+Tweet	发推
+promises	承诺
+Classified tape	机密录音带
+Classified Tape	机密录音带
+Carefree Environment	无忧无虑的环境
+Carefree Environment  Environment	无忧无虑的环境
+Effective Manager	高效管理者
+Stage	阶段
+choose character and action	选择人物与行动
+Congressman, Florida	佛罗里达州议员
+Launch a campaign to colonize Mars	发起火星殖民计划
+Compose the executive order	起草行政令
+Sign the executive order	签署行政令
+Lobby the exeeecutive order	游说通过行政令
+Reach 60% of approal rating	支持率达到 60%
+Appoint a non-White Chief of Staff	任命一名非白人幕僚长
+Propose Amendment 28	提出第28修正案
+Inauguration Speech	就职演讲
+Guilty !!!	有罪！！！
+Toggle	切换
+Who	谁
+The question	问题
+Occupation	职务
+Communications	公关部
+LOBBYIST	说客
+AVENGER	复仇者
+ENDOFMONTH_0	月底结算
+Close	关闭
+
+# ---------- 3. 人物介绍里的职务标签 ----------
+Bodyguard	保镖
+Communication director	公关主管
+Hacker	黑客
+Lawyer	律师
+Programmer	程序员
+Right in the Center	不偏不倚
+
+# ---------- 4. 人物介绍台词：第 1 行来自已译 TextAsset，2/3 行是硬编码英文残句 ----------
+The best place to deal	<clear>
+with all bastards."	<clear>
+It's time we gave journalists 	该让记者们也
+a taste of their own medicine	尝尝自己开的药了。
+But you can't fool me,	但你骗不了我，
+boss."	老大。
+
+# ---------- 5. 俄文预制体默认串（防止未刷新时露俄文） ----------
+Настройки	设置
+Новая игра	新游戏
+Выйти из игры	退出游戏
+Отмена	取消
+Применить	应用
+Обычная	普通
+Экран	画面
+Игра	游戏
+Звук	音频
+Язык	语言
+Разрешение	分辨率
+Режим экрана	屏幕模式
+Во весь экран	全屏
+Размер курсора	光标大小
+Текст в событиях	事件文字大小
+Скорость текста	文字速度
+Громкость музыки	音乐音量
+Громкость эффектов	音效音量
+Громкость катсцен	过场动画音量
+Лоббируется	正在游说
+Выберите подчиненного	选择一名下属
+Выбрать ячейку	选择槽位
+Пригласить влиятельных людей	邀请有影响力的人
+11 месяцев осталось	剩余 11 个月
+появится спустя 3 месяца	3 个月后出现
+Джо устал и нуждается в отдыхе	乔累了，需要休息
+
+# ---------- 6. 官方英文版残留的俄文/德文（顺手修正） ----------
+Охота на крота Mole Hunt	猎鼹行动
+Поправка Amendment 28.	第28修正案
+Как крот слил содержание указа в прессу?  How did the mole 	鼹鼠是怎么把行政令的内容泄露给媒体的？
+Кто был источником? Who was the first source?	谁是第一个消息来源？
+Как думаешь, кто был первоначальным источником слуха?	你觉得最初的消息来源是谁？
+Рассказал конфиденциально как надежный источник	以可靠消息来源身份匿名透露
+Why was it Ngoyen's foundation that was robbed? Как думаешь, почему грабанули именно фонд Нгуен?	为什么被抢的偏偏是阮氏基金会？
+Юрист\n	律师
+Finanzminister	幕僚长
+Sie haben nur keine Ahnung, wer ich wirklich bin, Herr Präsident.	总统先生，您根本不知道我是谁。
+
+# --- 由 tools/augment_ui_extra.py 追加：普查发现仍在显示英文的真实内容 ---
+Ineffective Manager	无能经理
+Courting the Elites	拉拢权贵
+Lobbying Successful	游说成功
+Prize Fund	奖金池
+per month	每月
+Reconcile	对账
+Finish	完成
+Cancel	取消
+Apply	应用
+Back	返回
+Audio	音频
+Visuals	画面
+Game	游戏
+Sign	签署
+Vice President	副总统
+President	总统
+Persuasion	说服
+Money	金钱
+Rest	休息
+Other	其他
+Go Back	返回
+Colonize Mars	殖民火星
+Why was it Ngoyen's foundation that was robbed?\nКак думаешь, почему грабанули именно фонд Нгуен?	为什么被抢的偏偏是阮氏基金会？
+She was spending the foundation's money on her personal needs	她把基金会的钱用在了自己的私事上
+They thought the were doing a good deed	他们以为自己在做好事
+What drove the crimonal?	是什么驱使了这个罪犯？（原文 crimonal 系 criminal 笔误）
+What does the wierd work shcedule mean?	那奇怪的工作时间表意味着什么？（原文 wierd/shcedule 系笔误）
+What is the flaw in Amendment 28?	第28修正案的漏洞是什么？
+Why can't you remain in office for another term?	你为什么不能连任？
+How do you lose an election to Wister?	你怎么会输给威斯特？
+You won't get impeached no matter what you do.	无论你做什么，都不会被弹劾。
+Whenever mist hangs over the waters of Lake Orwell on Harlech Island, sailors catch sight of a phantom castle just out of reach. As they draw near, it fades into the fog like a mirage, leaving only questions for all who have borne witness to this <style=b>“Castle Strangerock.”	每当雾气笼罩哈莱克岛奥威尔湖的水面，水手们就会看见一座近在咫尺却无法抵达的幻影城堡。他们靠近时，城堡便如海市蜃楼般消失在雾中，只给所有亲眼目睹过它的人留下无尽疑问——<style=b>“异乡岩城堡”。
+Draft of First Executive Order: Cure Cancer	第一号行政命令草案：治愈癌症
+Vote	投票
