@@ -1,6 +1,24 @@
-## 《This Is the President》完整简体中文汉化 v1.0.2
+## 《This Is the President》完整简体中文汉化 v1.0.3
 
 **全文本汉化**，覆盖游戏从主菜单到结局的全部文字。
+
+### v1.0.3 修订（2026-10-11，原版「雇佣」失效修复）
+
+修好第二处**原版自身的逻辑错误**：「申请」窗口点「雇佣」→ 确认框选「是」→ 结果页点「关闭」之后，
+候选人**不会加入团队**（薪水和事件结果却已经生效，所以看起来像「点了没反应」）。
+
+原因是原版在生成结果页（immediate result）时，只把玩家选的 `SelectedOption` 复制给了新的
+`MicroMonologueElement`，**没有复制 `accepted`**；结果页的 `MicroMonologueElement.Initialize()`
+于是改用 `EventProcessor.GetCurrentLine()` 重新推断，而此时当前行恰好是 **REJECT** 行 ⇒ 结果页报告
+`accepted=false` ⇒ 点「关闭」时 `CloseClicked()` 以 `result=false` 回调
+`ApplicationsWindow.OnHire` 的 `if (result) Hire(slot)` ⇒ 雇佣被静默跳过。
+
+- 影响：**原版游戏同样会出现，与汉化无关**；现象是弹窗、台词、薪水变化都正常，就是队伍里不会多出这个人
+- 修复：插件升到 **v8.3.0**，用两个 Harmony prefix 把玩家真正点击的那个元素的 `accepted` 记下来，
+  在结果页 `CloseClicked()` 之前还原回去（只补这个丢失的字段，**不改事件数据、存档与平衡**）
+- 验证：实机跑通「雇佣 → 是 → 关闭」，日志出现 `Hire slot=key=DIPLOMAT_1 …` 与
+  `CharacterManager.HireCharacter key=DIPLOMAT_1`，地图底部团队栏由 5 人变 6 人（新增「天 吴」），
+  申请窗口官方栏同步清空
 
 ### v1.0.2 修订（2026-10-11，原版崩溃兜底）
 
@@ -56,11 +74,11 @@
 ### 技术方案（两层）
 
 1. **注入层**：把译文写进游戏自己的 `TextAsset` 语言槽（4 个语言槽全部替换），并换上中文字体 —— 游戏 95% 的文本走这条路。
-2. **运行时层**：附带的 BepInEx 插件 `TITPFontFix` 为游戏的 TextMeshPro 字体资产在运行时烘出 CJK 动态图集（原始资产是静态图集、不含汉字，不装插件会显示方框），并覆盖硬编码 UI。**只动字体 + 一处原版崩溃兜底，不改游戏数据、存档与平衡。**
+2. **运行时层**：附带的 BepInEx 插件 `TITPFontFix` 为游戏的 TextMeshPro 字体资产在运行时烘出 CJK 动态图集（原始资产是静态图集、不含汉字，不装插件会显示方框），并覆盖硬编码 UI。**只动字体 + 两处原版 bug 兜底，不改游戏数据、存档与平衡。**
 
 ### 安装
 
-1. 下载本 Release 的 `TITP-CHS-v1.0.2.zip` 并解压到任意目录
+1. 下载本 Release 的 `TITP-CHS-v1.0.3.zip` 并解压到任意目录
 2. 双击 `install.bat`（未自动找到游戏时把游戏根目录拖进窗口回车；多 Steam 库用 `install.bat --list-games`）
 3. 从 Steam 正常启动游戏
 
@@ -70,12 +88,12 @@
 ### 校验
 
 ```
-文件：TITP-CHS-v1.0.2.zip
-大小：29,318,015 字节
-SHA-256：A0D2B00CC6C323A7DE76731BBB37CE809951802AF0B14EFB8847E5CE6E8E12AE
+文件：TITP-CHS-v1.0.3.zip
+大小：29,320,555 字节
+SHA-256：076A705A2F5BDC9F5404E90325CC9883E4B44D6528D0A89F71AFC7D92FD97E2C
 ```
 
-Windows 上可用 `certutil -hashfile TITP-CHS-v1.0.2.zip SHA256` 自行核对。
+Windows 上可用 `certutil -hashfile TITP-CHS-v1.0.3.zip SHA256` 自行核对。
 
 ### 反馈
 

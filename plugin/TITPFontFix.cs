@@ -30,6 +30,18 @@
 //      ThisIsThePresident.Game.ConditionPostfixListElement.GetChar() turns any such
 //      exception into a plain "false" result, so condition evaluation continues.
 //
+// v8.1 addition (second half of the same vanilla bug):
+//   8. Treating a thrown condition as plain "false" is not enough: the micromonologue data
+//      contains mutually exclusive lines such as "REQUEST_AGING: >=5" and "REQUEST_AGING: <5",
+//      and making BOTH false leaves no matching line at all, so
+//      EventProcessor.GetFirstMicromonologueLine() runs past the end of the line array
+//      (IndexOutOfRangeException) and the popup stays dead. v8.1 therefore wraps every entry
+//      of ConditionHelper.conditionFunctions: when the original function throws, the unknown
+//      quantity is treated as 0 and the comparison (">=5", "<5", ...) is re-evaluated against
+//      it, mirroring ConditionHelper.CompareInt. The two branches stay complementary, exactly
+//      one line matches, and the value is semantically right (a freshly approached character
+//      has no accumulated request bar yet).
+//
 // Compile with plugin\build_plugin.ps1 (system csc, C# 5 only).
 using System;
 using System.Collections;
@@ -48,7 +60,7 @@ using UnityEngine.UI;
 
 namespace TITP
 {
-    [BepInPlugin("titp.chinesefontfix", "TITP Chinese Font Fix", "8.0.0")]
+    [BepInPlugin("titp.chinesefontfix", "TITP Chinese Font Fix", "8.1.0")]
     public class TITPFontFix : BaseUnityPlugin
     {
         private const int SamplingPointSize = 48;
@@ -81,7 +93,8 @@ namespace TITP
             catch (Exception ex) { Logger.LogWarning("TITP font fix: cannot create data dir: " + ex.Message); }
             LoadUiMap();
             InstallConditionGuard();
-            Logger.LogInfo("TITP font fix v8: unity=" + Application.unityVersion + " pluginPath=" + Paths.PluginPath
+            InstallHireFix();
+            Logger.LogInfo("TITP font fix v8.3: unity=" + Application.unityVersion + " pluginPath=" + Paths.PluginPath
                 + " dataDir=" + _dataDir + " uiMap=" + _uiMap.Count);
         }
 
@@ -129,11 +142,139 @@ namespace TITP
                 {
                     Logger.LogWarning("condition guard: ConditionHelper.SolveCondition not found (no breadcrumb)");
                 }
+                WrapConditionFunctions();
             }
             catch (Exception ex)
             {
                 Logger.LogWarning("condition guard: install failed: " + ex);
             }
+        }
+
+        // ------------------------------------------------------------------ v8.3
+        // Vanilla bug: when a micromonologue option leads straight to a result page
+        // ("immediate result"), MicroMonologuePanel.OnElementClosing creates a second
+        // MicroMonologueElement for that result page, but only copies SelectedOption --
+        // not the accepted flag. MicroMonologueElement.Initialize then re-derives
+        // 'accepted' from EventProcessor.GetCurrentLine(), which after FollowChoice()
+        // points at the REJECT line, so the result page always reports accepted=false.
+        // MicroMonologueElement.CloseClicked() therefore calls the hiring callback with
+        // result=false and ApplicationsWindow.OnHire never runs Hire(slot): the candidate
+        // is never added to the team (salary/event effects do apply, which is why the
+        // popup looks like it worked).
+        // Fix: remember the accepted flag of the element the player actually clicked and
+        // restore it on the result page right before CloseClicked() reads it.
+        private static bool? _pendingImmediateAccepted;
+
+        private void InstallHireFix()
+        {
+            try
+            {
+                Harmony harmony = new Harmony("titp.chinesefontfix.hirefix");
+                PatchPrefix(harmony, "ThisIsThePresident.UI.MicroMonologuePanel:OnElementClosing", "RecordAcceptancePrefix");
+                PatchPrefix(harmony, "ThisIsThePresident.MicroMonologueElement:CloseClicked", "ApplyAcceptancePrefix");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning("hire fix: install failed: " + ex);
+            }
+        }
+
+        private void PatchPrefix(Harmony harmony, string target, string prefixName)
+        {
+            try
+            {
+                MethodInfo m = AccessTools.Method(target);
+                if (m == null)
+                {
+                    Logger.LogWarning("hire fix: " + target + " not found");
+                    return;
+                }
+                MethodInfo pre = typeof(TITPFontFix).GetMethod(prefixName, BindingFlags.Static | BindingFlags.NonPublic);
+                harmony.Patch(m, prefix: new HarmonyMethod(pre));
+                Logger.LogInfo("hire fix: patched " + target);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning("hire fix: cannot patch " + target + ": " + ex.Message);
+            }
+        }
+
+        private static object GetMember(object o, string name)
+        {
+            if (o == null) return null;
+            Type t = o.GetType();
+            PropertyInfo p = t.GetProperty(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (p != null) return p.GetValue(o, null);
+            FieldInfo f = t.GetField(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            return f == null ? null : f.GetValue(o);
+        }
+
+        private static void RecordAcceptancePrefix(object __instance, bool isAccepted, bool hasImmediateResult)
+        {
+            if (!hasImmediateResult) return;
+            try
+            {
+                object top = PeekTop(GetMember(__instance, "backDrops"));
+                object acc = top == null ? null : GetMember(top, "accepted");
+                if (acc is bool)
+                {
+                    _pendingImmediateAccepted = (bool)acc;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogWarn("hire fix: cannot record accepted flag: " + ex.Message);
+            }
+        }
+
+        private static void ApplyAcceptancePrefix(object __instance)
+        {
+            try
+            {
+                if (!_pendingImmediateAccepted.HasValue) return;
+                object isResult = GetMember(__instance, "isResult");
+                if (!(isResult is bool) || !(bool)isResult) return;
+                bool want = _pendingImmediateAccepted.Value;
+                _pendingImmediateAccepted = null;
+                SetMember(__instance, "accepted", want);
+            }
+            catch (Exception ex)
+            {
+                LogWarn("hire fix: cannot restore accepted flag: " + ex.Message);
+            }
+        }
+
+        private static object PeekTop(object collection)
+        {
+            if (collection == null) return null;
+            object v = InvokeMethod(collection, "Peek");
+            if (v != null) return v;
+            return InvokeMethod(collection, "get_Item", 0);
+        }
+
+        private static object InvokeMethod(object target, string name, params object[] args)
+        {
+            if (target == null) return null;
+            Type t = target.GetType();
+            MethodInfo m = args.Length == 0
+                ? t.GetMethod(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                : t.GetMethod(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+                    null, Array.ConvertAll(args, a => a.GetType()), null);
+            return m == null ? null : m.Invoke(target, args);
+        }
+
+        private static void SetMember(object o, string name, object value)
+        {
+            if (o == null) return;
+            Type t = o.GetType();
+            FieldInfo f = t.GetField(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (f != null)
+            {
+                f.SetValue(o, value);
+                return;
+            }
+            PropertyInfo p = t.GetProperty(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (p != null && p.CanWrite) p.SetValue(o, value, null);
         }
 
         // Remember the condition being evaluated so the log names the culprit.
@@ -157,6 +298,130 @@ namespace TITP
                     + "' threw " + __exception.GetType().Name + ": " + __exception.Message + where + " -> treated as false");            }
             __result = 'f';
             return null;
+        }
+
+        // ---------------------------------------------------------------- v8.1
+        // If a condition function throws (it dereferences the inactive global event
+        // processor) we must not simply answer "false": the data uses mutually exclusive
+        // pairs like "REQUEST_AGING: >=5" / "REQUEST_AGING: <5", and making both false
+        // leaves EventProcessor.GetFirstMicromonologueLine() with no matching line at all
+        // (it then throws IndexOutOfRangeException and the popup stays dead).
+        // Instead the unknown quantity is treated as 0 and the comparison is evaluated
+        // again - exactly one branch of such a pair then matches.
+        private static int _condFallbacks;
+        private static int _condWrapped;
+
+        private void WrapConditionFunctions()
+        {
+            try
+            {
+                // Dictionary<string, Func<string[], bool>> on ConditionHelper. The condition
+                // element looks the delegate up lazily, so replacing the entries also takes
+                // effect for elements that were created earlier.
+                FieldInfo fld = null;
+                Type helper = AccessTools.TypeByName("ThisIsThePresident.Game.ConditionHelper");
+                if (helper != null)
+                {
+                    fld = helper.GetField("conditionFunctions",
+                        BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+                }
+                IDictionary dict = (fld == null) ? null : (fld.GetValue(null) as IDictionary);
+                if (dict == null)
+                {
+                    Logger.LogWarning("condition guard: ConditionHelper.conditionFunctions not found");
+                    return;
+                }
+                // snapshot the keys first - the dictionary must not be modified while enumerating
+                List<object> keys = new List<object>();
+                foreach (object k in dict.Keys) keys.Add(k);
+                int wrapped = 0;
+                int nulls = 0;
+                for (int i = 0; i < keys.Count; i++)
+                {
+                    string key = keys[i] as string;
+                    if (key == null) continue;
+                    object raw = dict[keys[i]];
+                    Func<string[], bool> original = raw as Func<string[], bool>;
+                    if (raw != null && original == null)
+                    {
+                        Logger.LogWarning("condition guard: " + key + " is not Func<string[],bool>");
+                        continue;
+                    }
+                    // "LOBBIED" ships as a null entry in the vanilla dictionary; calling it
+                    // would throw NullReferenceException, so give it the same fallback.
+                    if (original == null) nulls++;
+                    dict[keys[i]] = WrapConditionFunction(key, original);
+                    wrapped++;
+                }
+                _condWrapped = wrapped;
+                Logger.LogInfo("condition guard: wrapped " + wrapped + " of " + keys.Count
+                    + " condition functions with a value-based fallback (" + nulls + " were null)");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning("condition guard: wrapping condition functions failed: " + ex);
+            }
+        }
+
+        private static Func<string[], bool> WrapConditionFunction(string key, Func<string[], bool> original)
+        {
+            return delegate(string[] parts)
+            {
+                if (original == null) return FallbackConditionValue(parts);
+                try
+                {
+                    return original(parts);
+                }
+                catch (Exception ex)
+                {
+                    _condFallbacks++;
+                    bool result = FallbackConditionValue(parts);
+                    if (_condFallbacks <= 20)
+                    {
+                        LogWarn("condition value guard #" + _condFallbacks + ": " + key + " '"
+                            + (_curCondition == null ? "?" : _curCondition) + "' threw "
+                            + ex.GetType().Name + ": " + ex.Message + " -> quantity assumed 0 -> "
+                            + (result ? "true" : "false"));
+                    }
+                    return result;
+                }
+            };
+        }
+
+        // parts[1] is the comparison written in the data, e.g. ">=5" or "<5".
+        private static bool FallbackConditionValue(string[] parts)
+        {
+            if (parts == null || parts.Length < 2) return false;
+            return CompareAssumedZero(parts[1]);
+        }
+
+        // Mirror of ConditionHelper.CompareInt(conditionPart, 0) - the mirrors the game's own
+        // order of comparison operations (==, !=, >=, <=, >, <), with the unknown quantity
+        // taken as 0 because nothing has accumulated yet.
+        private static bool CompareAssumedZero(string spec)
+        {
+            if (string.IsNullOrEmpty(spec)) return false;
+            spec = spec.Trim();
+            string[] operators = new string[6] { "==", "!=", ">=", "<=", ">", "<" };
+            for (int i = 0; i < operators.Length; i++)
+            {
+                if (!spec.StartsWith(operators[i], StringComparison.Ordinal)) continue;
+                int limit;
+                if (!int.TryParse(spec.Replace(operators[i], "").Trim(), out limit)) return false;
+                int compare = 0.CompareTo(limit);   // == CompareInt(spec, 0)
+                switch (operators[i])
+                {
+                    case "==": return compare == 0;
+                    case "!=": return compare != 0;
+                    case ">=": return compare >= 0;
+                    case "<=": return compare <= 0;
+                    case ">": return compare > 0;
+                    default: return compare < 0;
+                }
+            }
+            int equality;
+            if (int.TryParse(spec, out equality)) return 0 == equality;
+            return false;
         }
 
         private static string DescribeCurrentEventProcessor()

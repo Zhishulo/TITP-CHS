@@ -3,7 +3,7 @@
 
 # 《This Is the President》简体中文汉化
 
-**下载安装包 → [Releases 页面](https://github.com/Zhishulo/TITP-CHS/releases/latest)**（TITP-CHS-v1.0.2.zip，29.3 MB，包内自带运行时，**无需安装 Python**）
+**下载安装包 → [Releases 页面](https://github.com/Zhishulo/TITP-CHS/releases/latest)**（TITP-CHS-v1.0.3.zip，29.3 MB，包内自带运行时，**无需安装 Python**）
 
 本仓库是汉化的源码仓库：资源注入器 patch.py、BepInEx 插件源码 plugin/TITPFontFix.cs、
 翻译工具链 tools/*.py、以及全部译文数据 data/。下面这份文档与安装包内附带的说明书是同一份。
@@ -27,7 +27,7 @@
 | 部分 | 作用 | 是否改动游戏文件 |
 |------|------|------------------|
 | **译文数据注入**（Python 脚本，一次性） | 把中文译文写进 `resources.assets` / `sharedassets0.assets` 的全部语言槽位（本轮构建实测：**34081 条字符串 / 1407 个 TextAsset**），并把 15 个 legacy `Font` 的内嵌数据换成 Noto Sans SC 子集 | 是（首次运行会备份原文件） |
-| **BepInEx 插件 `TITPFontFix` v8** | ① 运行时把 932 个 `TMP_Text` 用到的静态 TMP 字体资产接上动态 CJK 图集（游戏自带字体没有汉字字形，不装插件会显示 □□□）；② 用 `ui_extra.tsv`（158 条）覆盖硬编码在预制体/程序集里的界面文字——包括官方英文版遗留的俄文、德文串 | 否（只挂 BepInEx） |
+| **BepInEx 插件 `TITPFontFix` v8.3** | ① 运行时把 932 个 `TMP_Text` 用到的静态 TMP 字体资产接上动态 CJK 图集（游戏自带字体没有汉字字形，不装插件会显示 □□□）；② 用 `ui_extra.tsv`（158 条）覆盖硬编码在预制体/程序集里的界面文字——包括官方英文版遗留的俄文、德文串 | 否（只挂 BepInEx） |
 
 > 只装其中一半是不行的：**只有译文 = 满屏豆腐；只有插件 = 全是英文**。
 
@@ -133,17 +133,17 @@ BepInEx 属于常见的 Unity 游戏 mod 框架，本游戏没有反作弊；成
 
 ## 8. 版本与校验
 
-- 汉化版本：**v1.0.2（全量修复版，2026-10-11 修订）**
+- 汉化版本：**v1.0.3（全量修复版，2026-10-11 修订）**
 - 译文数据：`data\zh\*.json`，75 个文件 / **28144 条** / 约 **1069474 个汉字**
 - 构建实测：`zh map size 24312`、`translated 34081 strings across 1407 files`、`fonts swapped 15 / textassets replaced 1481`
 - 注入后 assets SHA-256（前 16 位）：`resources.assets 02B3837BC70060C4`、`sharedassets0.assets AAF29309AF8302A4`
-- 插件 `TITPFontFix.dll`（v8，20480 字节）SHA-256：
-  `6B4EF96EF66271AD2A6C54354874A5549B020E2A81EE729D3E2FBE374A2AA74F`
+- 插件 `TITPFontFix.dll`（v8.3，25600 字节）SHA-256：
+  `5A6F3070612CC561297E4DD22D9C198880C985F40DD956A4B6C146068E1EEBC2`
 - 字体：`fonts\sub-Regular.ttf`（Noto Sans SC 子集，1405748 字节，SIL OFL 1.1）
 - BepInEx：5.4.22.0（<https://github.com/BepInEx/BepInEx/releases/tag/v5.4.22>）
-- 安装包 `TITP-CHS-v1.0.2.zip`（29,318,015 字节）SHA-256：
-  `A0D2B00CC6C323A7DE76731BBB37CE809951802AF0B14EFB8847E5CE6E8E12AE`
-  下载后可用 `certutil -hashfile TITP-CHS-v1.0.2.zip SHA256` 核对（GitHub Release 上传的资产已由 GitHub 校验为同一哈希）。
+- 安装包 `TITP-CHS-v1.0.3.zip`（29,320,555 字节）SHA-256：
+  `076A705A2F5BDC9F5404E90325CC9883E4B44D6528D0A89F71AFC7D92FD97E2C`
+  下载后可用 `certutil -hashfile TITP-CHS-v1.0.3.zip SHA256` 核对（GitHub Release 上传的资产已由 GitHub 校验为同一哈希）。
 
 ## 9. 鸣谢与许可
 
