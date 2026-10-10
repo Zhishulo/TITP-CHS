@@ -1,7 +1,7 @@
 <!-- gh-header -->
 # 《This Is the President》简体中文汉化
 
-**下载安装包 → [Releases 页面](../../releases/latest)**（TITP-CHS-v1.0.zip，29.3 MB，包内自带运行时，**无需安装 Python**）
+**下载安装包 → [Releases 页面](https://github.com/Zhishulo/TITP-CHS/releases/latest)**（TITP-CHS-v1.0.zip，29.3 MB，包内自带运行时，**无需安装 Python**）
 
 本仓库是汉化的源码仓库：资源注入器 patch.py、BepInEx 插件源码 plugin/TITPFontFix.cs、
 翻译工具链 	ools/*.py、以及全部译文数据 data/。下面这份文档与安装包内附带的说明书是同一份。
@@ -139,6 +139,9 @@ BepInEx 属于常见的 Unity 游戏 mod 框架，本游戏没有反作弊；成
   `5F184028B5699DA96F6576EA4DE4C9A5C7F1B1594B968E49011F5F3EA69DEA1A`
 - 字体：`fonts\sub-Regular.ttf`（Noto Sans SC 子集，1405748 字节，SIL OFL 1.1）
 - BepInEx：5.4.22.0（<https://github.com/BepInEx/BepInEx/releases/tag/v5.4.22>）
+- 安装包 `TITP-CHS-v1.0.zip`（29,305,258 字节）SHA-256：
+  `ED35A75B6B943EED51E7766CCBE4E3F89AC4DBED9D702075B82BA66369BE7E68`
+  下载后可用 `certutil -hashfile TITP-CHS-v1.0.zip SHA256` 核对（GitHub Release 上传的资产已由 GitHub 校验为同一哈希）。
 
 ## 9. 鸣谢与许可
 

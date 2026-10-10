@@ -29,14 +29,16 @@ ED35A75B6B943EED51E7766CCBE4E3F89AC4DBED9D702075B82BA66369BE7E68  TITP-CHS-v1.0.
 1. **网盘**：蓝奏云（<100 MB 免费、免注册下载体验最好）→ 主推；备用 百度网盘 / 夸克 / 123 云盘（同样传 ZIP，不要传文件夹）。
 2. **Steam 社区 → 指南（Guide）**：发一篇图文指南，正文里放网盘链接。这是最容易被玩家搜到的地方（游戏 appid `730430`）。
 3. **国内社区**：B 站（发一条演示视频，简介放链接）、贴吧（This Is the President 吧 / 单机游戏吧）、NGA、其乐（keylol）、QQ 群。
-4. **GitHub Release**（可选）：如果你愿意开源 `patch.py`/插件源码，可以放一个 Release，附带 ZIP；好处是校验值天然可信、更新方便。
+4. **GitHub Release（已完成）**：仓库 https://github.com/Zhishulo/TITP-CHS 已建好并上传了 ZIP 资产，发帖、给官方的信都可以直接引用；校验值天然可信。
 5. **不要**传到需要注册/限速严重的网盘作为唯一渠道，也**不要**收费或设置付费门槛。
 
 ### 已上传（2026-10-07）
 
 | 渠道 | 链接 | 提取码 |
 | --- | --- | --- |
-| 百度网盘 | https://pan.baidu.com/s/5FNp0TWim0T-a0X7-_8oktg | `____`（**请补上提取码**，否则用户打不开） |
+| 百度网盘（无需提取码） | https://pan.baidu.com/s/5FNp0TWim0T-a0X7-_8oktg | 无，直接打开 |
+| **GitHub Release 页面** | https://github.com/Zhishulo/TITP-CHS/releases/tag/v1.0.0 | 无 |
+| **GitHub 直链**（可给外网/官方） | https://github.com/Zhishulo/TITP-CHS/releases/download/v1.0.0/TITP-CHS-v1.0.zip | 无 |
 
 **发布前必须核对**：网盘上那份必须是最终版 —— 大小 `29,305,258` 字节，
 SHA-256 `ED35A75B6B943EED51E7766CCBE4E3F89AC4DBED9D702075B82BA66369BE7E68`。
@@ -66,9 +68,10 @@ SHA-256 `ED35A75B6B943EED51E7766CCBE4E3F89AC4DBED9D702075B82BA66369BE7E68`。
 【效果预览】（放 3-4 张截图：主菜单 / 难度选择 / 对话 / 文档面板）
 
 【下载】
-百度网盘：https://pan.baidu.com/s/5FNp0TWim0T-a0X7-_8oktg
-提取码：____
-（备用链接：__________）
+GitHub（推荐，免登录、可断点续传）：
+  页面：https://github.com/Zhishulo/TITP-CHS/releases/tag/v1.0.0
+  直链：https://github.com/Zhishulo/TITP-CHS/releases/download/v1.0.0/TITP-CHS-v1.0.zip
+百度网盘（无需提取码）：https://pan.baidu.com/s/5FNp0TWim0T-a0X7-_8oktg
 校验：29,305,258 字节，SHA-256 ED35A75B6B943EED51E7766CCBE4E3F89AC4DBED9D702075B82BA66369BE7E68
 
 
