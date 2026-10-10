@@ -47,8 +47,8 @@ Option (b) is what we will do by default if we do not hear back, but we would mu
 
 **Where you can look at it right now.** We have already published the fan build so that Chinese players can use it today while we wait for your answer:
 
-- release page (ZIP, 28 MB, with SHA-256): https://github.com/Zhishulo/TITP-CHS/releases/tag/v1.0.0
-- direct download: https://github.com/Zhishulo/TITP-CHS/releases/download/v1.0.0/TITP-CHS-v1.0.zip
+- release page (ZIP, 28 MB, with SHA-256): https://github.com/Zhishulo/TITP-CHS/releases/tag/v1.0.1
+- direct download: https://github.com/Zhishulo/TITP-CHS/releases/download/v1.0.1/TITP-CHS-v1.0.1.zip
 - source, translation data and tooling (MIT / CC0): https://github.com/Zhishulo/TITP-CHS
 
 If you would prefer it not to be public while you consider option (a), tell us and we will make the repository private or take it down the same day.
@@ -61,8 +61,8 @@ With respect,
 
 **Attached / available on request**
 
-- `TITP-CHS-v1.0.zip` — the complete package (translation data, font under SIL OFL 1.1, plug-in, installer)
-- or simply download it: https://github.com/Zhishulo/TITP-CHS/releases/download/v1.0.0/TITP-CHS-v1.0.zip
+- `TITP-CHS-v1.0.1.zip` — the complete package (translation data, font under SIL OFL 1.1, plug-in, installer)
+- or simply download it: https://github.com/Zhishulo/TITP-CHS/releases/download/v1.0.1/TITP-CHS-v1.0.1.zip
 - `OFFICIAL_SUBMISSION.md` — scope of coverage, technical approach, and the list of source-text issues
 - `TERMINOLOGY.md` — the glossary and translation conventions we used
 
@@ -135,12 +135,12 @@ With respect,
 
 1. **THQ Nordic 官网联系表单 / 官方 Discord / X `@THQNordic`** —— 主渠道，正文用上面的英文正本。
 2. **SuperPAC**：Steam 商店页的开发商链接、官网、X；找不到公开邮箱就通过发行商转达（信里已写明 cc: SuperPAC）。
-3. **`support@quanticlab.com`** —— 简版转交请求，附 GitHub Release 链接（https://github.com/Zhishulo/TITP-CHS/releases/tag/v1.0.0）。
+3. **`support@quanticlab.com`** —— 简版转交请求，附 GitHub Release 链接（https://github.com/Zhishulo/TITP-CHS/releases/tag/v1.0.1）。
 4. 若两周无回复：在 Steam 社区讨论区发一个礼貌的公开帖（@ 开发者），标题写明「gift, free, no strings」，这通常比邮件更快被看到。
 
 小提示：
 - 一封信只发一次，别群发轰炸；两周无回复再换渠道，并在新渠道里注明「已通过 X 渠道致信，未获回复」。
-- **别把 28 MB 的 ZIP 塞邮件**：给 GitHub 链接（https://github.com/Zhishulo/TITP-CHS/releases/download/v1.0.0/TITP-CHS-v1.0.zip）+ 只附 `OFFICIAL_SUBMISSION.md`；对方回信索要时再按其要求方式交付。GitHub 对外网可直连，比百度网盘可靠得多。
+- **别把 28 MB 的 ZIP 塞邮件**：给 GitHub 链接（https://github.com/Zhishulo/TITP-CHS/releases/download/v1.0.1/TITP-CHS-v1.0.1.zip）+ 只附 `OFFICIAL_SUBMISSION.md`；对方回信索要时再按其要求方式交付。GitHub 对外网可直连，比百度网盘可靠得多。
 - 明确写「不要报酬、不要署名、可让渡权利」，能省掉对方内部法务一半顾虑。
 - 若对方要求下架：**立刻照做**并在发布帖注明 —— 对社区声誉反而更好，也保住将来合作的可能。
 

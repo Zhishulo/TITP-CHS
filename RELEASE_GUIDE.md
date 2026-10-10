@@ -9,16 +9,16 @@
 
 | 项目 | 值 |
 | --- | --- |
-| 文件 | `TITP-CHS-v1.0.zip`（在 `C:\Users\96333\TITP-CHS\dist\`） |
-| 大小 | 29,305,258 字节（27.94 MB） |
+| 文件 | `TITP-CHS-v1.0.1.zip`（在 `C:\Users\96333\TITP-CHS\dist\`） |
+| 大小 | 29,302,578 字节（27.94 MB） |
 | 条目数 | 802 |
-| SHA-256 | `ED35A75B6B943EED51E7766CCBE4E3F89AC4DBED9D702075B82BA66369BE7E68` |
+| SHA-256 | `7021E4F67AD4DC0DE65E97B6AF5E3FAB8CA90933E9054553C6322971616A69CA` |
 
 **只上传这一个 ZIP，不要上传整个文件夹**（文件夹里没有多余东西，但网盘用户容易点错进目录）。
 在网盘同一目录再放一个 `sha256.txt`，内容一行：
 
 ```
-ED35A75B6B943EED51E7766CCBE4E3F89AC4DBED9D702075B82BA66369BE7E68  TITP-CHS-v1.0.zip
+7021E4F67AD4DC0DE65E97B6AF5E3FAB8CA90933E9054553C6322971616A69CA  TITP-CHS-v1.0.1.zip
 ```
 
 包内已经包含用户需要的一切，**用户不需要安装 Python、不需要单独下载 BepInEx、不需要下载字体**：
@@ -37,11 +37,11 @@ ED35A75B6B943EED51E7766CCBE4E3F89AC4DBED9D702075B82BA66369BE7E68  TITP-CHS-v1.0.
 | 渠道 | 链接 | 提取码 |
 | --- | --- | --- |
 | 百度网盘（无需提取码） | https://pan.baidu.com/s/5FNp0TWim0T-a0X7-_8oktg | 无，直接打开 |
-| **GitHub Release 页面** | https://github.com/Zhishulo/TITP-CHS/releases/tag/v1.0.0 | 无 |
-| **GitHub 直链**（可给外网/官方） | https://github.com/Zhishulo/TITP-CHS/releases/download/v1.0.0/TITP-CHS-v1.0.zip | 无 |
+| **GitHub Release 页面** | https://github.com/Zhishulo/TITP-CHS/releases/tag/v1.0.1 | 无 |
+| **GitHub 直链**（可给外网/官方） | https://github.com/Zhishulo/TITP-CHS/releases/download/v1.0.1/TITP-CHS-v1.0.1.zip | 无 |
 
 **发布前必须核对**：网盘上那份必须是最终版 —— 大小 `29,305,258` 字节，
-SHA-256 `ED35A75B6B943EED51E7766CCBE4E3F89AC4DBED9D702075B82BA66369BE7E68`。
+SHA-256 `7021E4F67AD4DC0DE65E97B6AF5E3FAB8CA90933E9054553C6322971616A69CA`。
 若你是在本指南更新前下载的 ZIP（大小/哈希对不上），**请重新上传**，否则用户拿到的可能是旧译文。
 
 
@@ -69,10 +69,10 @@ SHA-256 `ED35A75B6B943EED51E7766CCBE4E3F89AC4DBED9D702075B82BA66369BE7E68`。
 
 【下载】
 GitHub（推荐，免登录、可断点续传）：
-  页面：https://github.com/Zhishulo/TITP-CHS/releases/tag/v1.0.0
-  直链：https://github.com/Zhishulo/TITP-CHS/releases/download/v1.0.0/TITP-CHS-v1.0.zip
+  页面：https://github.com/Zhishulo/TITP-CHS/releases/tag/v1.0.1
+  直链：https://github.com/Zhishulo/TITP-CHS/releases/download/v1.0.1/TITP-CHS-v1.0.1.zip
 百度网盘（无需提取码）：https://pan.baidu.com/s/5FNp0TWim0T-a0X7-_8oktg
-校验：29,305,258 字节，SHA-256 ED35A75B6B943EED51E7766CCBE4E3F89AC4DBED9D702075B82BA66369BE7E68
+校验：29,302,578 字节，SHA-256 7021E4F67AD4DC0DE65E97B6AF5E3FAB8CA90933E9054553C6322971616A69CA
 
 
 【安装：三步】
@@ -113,9 +113,9 @@ Q7 报错/黑屏/插件没生效？
 - 出问题的界面截图
 
 【校验】
-TITP-CHS-v1.0.zip
-大小：29,305,258 字节
-SHA-256：ED35A75B6B943EED51E7766CCBE4E3F89AC4DBED9D702075B82BA66369BE7E68
+TITP-CHS-v1.0.1.zip
+大小：29,302,578 字节
+SHA-256：7021E4F67AD4DC0DE65E97B6AF5E3FAB8CA90933E9054553C6322971616A69CA
 
 【免责声明】
 本补丁为个人兴趣制作的非官方汉化，完全免费，禁止任何形式的售卖或付费下载。
