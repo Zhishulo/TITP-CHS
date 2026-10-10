@@ -1,10 +1,12 @@
 <!-- gh-header -->
+**简体中文** | [English](README.en.md) | [Русский](README.ru.md)
+
 # 《This Is the President》简体中文汉化
 
 **下载安装包 → [Releases 页面](https://github.com/Zhishulo/TITP-CHS/releases/latest)**（TITP-CHS-v1.0.1.zip，29.3 MB，包内自带运行时，**无需安装 Python**）
 
 本仓库是汉化的源码仓库：资源注入器 patch.py、BepInEx 插件源码 plugin/TITPFontFix.cs、
-翻译工具链 	ools/*.py、以及全部译文数据 data/。下面这份文档与安装包内附带的说明书是同一份。
+翻译工具链 tools/*.py、以及全部译文数据 data/。下面这份文档与安装包内附带的说明书是同一份。
 
 | | |
 | --- | --- |
@@ -67,7 +69,7 @@ runtime\python\python.exe patch.py --game "C:\Program Files (x86)\Steam\steamapp
 ```
 
 启动后游戏根目录应出现 `BepInEx\LogOutput.log`，里面有
-`TITP font fix v7: ... uiMap=124` 与 `baked 'TITP-CJK' from legacy Font 'LiberationSans'` 即表示插件已生效。
+`TITP font fix v7: ... uiMap=158` 与 `baked 'TITP-CJK' from legacy Font 'LiberationSans'` 即表示插件已生效。
 
 ## 4. 目录结构
 
@@ -139,8 +141,8 @@ BepInEx 属于常见的 Unity 游戏 mod 框架，本游戏没有反作弊；成
   `73DDBC6A47B33F17C7CAA0D937762117B4DB0C0C7EED6678E48ECAEF36794E75`
 - 字体：`fonts\sub-Regular.ttf`（Noto Sans SC 子集，1405748 字节，SIL OFL 1.1）
 - BepInEx：5.4.22.0（<https://github.com/BepInEx/BepInEx/releases/tag/v5.4.22>）
-- 安装包 `TITP-CHS-v1.0.1.zip`（29,302,578 字节）SHA-256：
-  `7021E4F67AD4DC0DE65E97B6AF5E3FAB8CA90933E9054553C6322971616A69CA`
+- 安装包 `TITP-CHS-v1.0.1.zip`（29,312,769 字节）SHA-256：
+  `8C49D399D240848DACD2D7E323821C92DFC419AE0BCE2653C145B9BC151AD85C`
   下载后可用 `certutil -hashfile TITP-CHS-v1.0.1.zip SHA256` 核对（GitHub Release 上传的资产已由 GitHub 校验为同一哈希）。
 
 ## 9. 鸣谢与许可
