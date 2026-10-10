@@ -1,4 +1,4 @@
-# 《This Is the President》汉化包 —— 发布指南（v1.0）
+# 《This Is the President》汉化包 —— 发布指南（v1.0.1）
 
 > 这份文档是给你（发布者）看的操作手册：**上传什么、帖子怎么写、用户怎么引导、被问到怎么答**。
 > 帖子模板可以直接复制粘贴。
@@ -36,11 +36,11 @@
 
 | 渠道 | 链接 | 提取码 |
 | --- | --- | --- |
-| 百度网盘（无需提取码） | https://pan.baidu.com/s/5FNp0TWim0T-a0X7-_8oktg | 无，直接打开 |
+| 百度网盘（无需提取码，**需换成 v1.0.1**） | https://pan.baidu.com/s/5FNp0TWim0T-a0X7-_8oktg | 无，直接打开 |
 | **GitHub Release 页面** | https://github.com/Zhishulo/TITP-CHS/releases/tag/v1.0.1 | 无 |
 | **GitHub 直链**（可给外网/官方） | https://github.com/Zhishulo/TITP-CHS/releases/download/v1.0.1/TITP-CHS-v1.0.1.zip | 无 |
 
-**发布前必须核对**：网盘上那份必须是最终版 —— 大小 `29,305,258` 字节，
+**发布前必须核对**：网盘上那份必须是最终版 —— 大小 `29,302,578` 字节，
 SHA-256 `7021E4F67AD4DC0DE65E97B6AF5E3FAB8CA90933E9054553C6322971616A69CA`。
 若你是在本指南更新前下载的 ZIP（大小/哈希对不上），**请重新上传**，否则用户拿到的可能是旧译文。
 
