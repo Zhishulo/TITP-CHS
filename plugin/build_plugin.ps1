@@ -28,6 +28,7 @@ $refs = @(
   (Join-Path $man 'UnityEngine.TextCoreModule.dll'),
   (Join-Path $man 'UnityEngine.UIModule.dll'),
   (Join-Path $man 'UnityEngine.UI.dll'),
+  (Join-Path $man 'UnityEngine.AnimationModule.dll'),
   (Join-Path $man 'Unity.TextMeshPro.dll'),
   (Join-Path $game 'BepInEx\core\BepInEx.dll'),
   (Join-Path $game 'BepInEx\core\0Harmony.dll')

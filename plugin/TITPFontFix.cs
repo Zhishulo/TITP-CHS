@@ -60,7 +60,7 @@ using UnityEngine.UI;
 
 namespace TITP
 {
-    [BepInPlugin("titp.chinesefontfix", "TITP Chinese Font Fix", "8.1.0")]
+    [BepInPlugin("titp.chinesefontfix", "TITP Chinese Font Fix", "8.4.0")]
     public class TITPFontFix : BaseUnityPlugin
     {
         private const int SamplingPointSize = 48;
@@ -94,7 +94,8 @@ namespace TITP
             LoadUiMap();
             InstallConditionGuard();
             InstallHireFix();
-            Logger.LogInfo("TITP font fix v8.3: unity=" + Application.unityVersion + " pluginPath=" + Paths.PluginPath
+            InstallItemsFixes();
+            Logger.LogInfo("TITP font fix v8.4: unity=" + Application.unityVersion + " pluginPath=" + Paths.PluginPath
                 + " dataDir=" + _dataDir + " uiMap=" + _uiMap.Count);
         }
 
@@ -196,6 +197,110 @@ namespace TITP
             catch (Exception ex)
             {
                 Logger.LogWarning("hire fix: cannot patch " + target + ": " + ex.Message);
+            }
+        }
+
+        // ------------------------------------------------------------------ items UI fixes (v8.4)
+        // 1) CustomScrollRect.OnDrag only forwards to the base ScrollRect while the private
+        //    field 'isDraggable' is true, and nothing in the game ever sets it -- so the item
+        //    list can never be scrolled by dragging. Force it on.
+        // 2) The Items panel is sometimes shown while the game is not running time (loading /
+        //    paused, Time.timeScale == 0), which leaves the panel's "show" animation frozen
+        //    half-way: item cards stay enlarged and the sell/close buttons sit on top of the
+        //    description text, and the list looks unscrollable. When that happens, settle the
+        //    layout and push every animator in the panel to the end of its current state.
+        private void InstallItemsFixes()
+        {
+            try
+            {
+                Harmony harmony = new Harmony("titp.chinesefontfix.itemsfix");
+                MethodInfo drag = AccessTools.Method("ThisIsThePresident.UI.CustomScrollRect:OnDrag");
+                if (drag == null)
+                {
+                    Logger.LogWarning("items fix: CustomScrollRect.OnDrag not found");
+                }
+                else
+                {
+                    harmony.Patch(drag, prefix: new HarmonyMethod(typeof(TITPFontFix).GetMethod(
+                        "ScrollDragPrefix", BindingFlags.Static | BindingFlags.NonPublic)));
+                    Logger.LogInfo("items fix: patched CustomScrollRect.OnDrag (drag scrolling enabled)");
+                }
+                PatchPostfix(harmony, "ThisIsThePresident.UI.ItemPanel:OnShowPanel", "ItemPanelShowPostfix");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning("items fix: install failed: " + ex);
+            }
+        }
+
+        private void PatchPostfix(Harmony harmony, string target, string postfixName)
+        {
+            try
+            {
+                MethodInfo m = AccessTools.Method(target);
+                if (m == null)
+                {
+                    Logger.LogWarning("items fix: " + target + " not found");
+                    return;
+                }
+                MethodInfo post = typeof(TITPFontFix).GetMethod(postfixName, BindingFlags.Static | BindingFlags.NonPublic);
+                harmony.Patch(m, postfix: new HarmonyMethod(post));
+                Logger.LogInfo("items fix: patched " + target);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning("items fix: cannot patch " + target + ": " + ex.Message);
+            }
+        }
+
+        private static void ScrollDragPrefix(object __instance)
+        {
+            try
+            {
+                if (__instance == null) return;
+                FieldInfo f = __instance.GetType().GetField("isDraggable",
+                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                if (f == null) return;
+                object v = f.GetValue(__instance);
+                if (!(v is bool) || !(bool)v) f.SetValue(__instance, true);
+            }
+            catch (Exception ex)
+            {
+                LogWarn("items fix: drag prefix failed: " + ex.Message);
+            }
+        }
+
+        private static void ItemPanelShowPostfix(object __instance)
+        {
+            try
+            {
+                Component c = __instance as Component;
+                if (c == null) return;
+                Canvas.ForceUpdateCanvases();
+                RectTransform rt = c.transform as RectTransform;
+                if (rt != null) LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
+                float scale = Time.timeScale;
+                Animator[] anims = c.GetComponentsInChildren<Animator>(true);
+                int settled = 0;
+                if (scale <= 0.001f)
+                {
+                    for (int i = 0; i < anims.Length; i++)
+                    {
+                        Animator a = anims[i];
+                        if (a == null || !a.isActiveAndEnabled) continue;
+                        AnimatorStateInfo st = a.GetCurrentAnimatorStateInfo(0);
+                        if (st.length <= 0f) continue;
+                        a.Play(st.shortNameHash, 0, 1f);
+                        a.Update(0f);
+                        settled++;
+                    }
+                }
+                LogWarn("items fix: panel shown timeScale=" + scale + " animators=" + anims.Length
+                    + " settled=" + settled + " layoutRebuilt=True");
+            }
+            catch (Exception ex)
+            {
+                LogWarn("items fix: show postfix failed: " + ex.Message);
             }
         }
 
